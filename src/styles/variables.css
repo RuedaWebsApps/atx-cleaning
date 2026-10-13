@@ -1,0 +1,51 @@
+/* ATX STAR CLEANING Design System Variables */
+:root {
+  /* Brand Palette from Approved Collateral */
+  --color-primary: #54105F;
+  --color-primary-dark: #23052B;
+  --color-primary-deep: #16021B;
+  --color-primary-light: #7A1A8A;
+  --color-accent: #D6A34A;
+  --color-accent-light: #F2C779;
+  --color-accent-dark: #B58229;
+  
+  /* Backgrounds & Surfaces */
+  --color-background: #FAF8F5;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #F4EFEA;
+  --color-border: #E8E0D5;
+  --color-border-dark: rgba(214, 163, 74, 0.25);
+  
+  /* Text */
+  --color-text: #28212B;
+  --color-text-muted: #6B6270;
+  --color-text-light: #F9F6F0;
+  --color-text-gold: #D6A34A;
+  
+  /* Elevations */
+  --shadow-sm: 0 4px 12px rgba(35, 5, 43, 0.05);
+  --shadow-md: 0 10px 25px rgba(35, 5, 43, 0.08);
+  --shadow-lg: 0 18px 45px rgba(35, 5, 43, 0.14);
+  --shadow-gold: 0 10px 30px rgba(214, 163, 74, 0.28);
+  
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  
+  /* Layout */
+  --container-width: 1200px;
+  --header-height: 80px;
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-heading: 'Cinzel', 'Playfair Display', Georgia, serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
