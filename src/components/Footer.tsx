@@ -86,11 +86,17 @@ export const Footer: React.FC<Props> = ({ content, onLanguageChange }) => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar with Rueda La Rola Media credit */}
         <div className="footer-bottom-bar">
           <p className="footer-copy">
             &copy; {currentYear} {content.footer.copyright}
           </p>
+          <div className="footer-agency-credit">
+            <span className="agency-credit-text">
+              {content.lang === 'es' ? 'Creado por ' : 'Created by '}
+              <strong className="agency-credit-highlight">Rueda La Rola Media</strong>
+            </span>
+          </div>
           <p className="footer-web-tag">
             www.atxstarcleaning.com
           </p>

@@ -108,6 +108,20 @@
   gap: 16px;
 }
 
+.footer-agency-credit {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.agency-credit-highlight {
+  color: var(--color-accent-light);
+  font-weight: 700;
+  margin-left: 4px;
+  letter-spacing: 0.02em;
+}
+
 .footer-web-tag {
   color: var(--color-accent);
   font-weight: 600;

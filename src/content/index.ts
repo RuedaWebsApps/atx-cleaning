@@ -65,31 +65,15 @@ export interface ContentData {
     tag: string;
     title: string;
     description: string;
-    form: {
-      fullName: string;
-      fullNamePlaceholder: string;
-      email: string;
-      emailPlaceholder: string;
-      phone: string;
-      phonePlaceholder: string;
-      serviceNeeded: string;
-      selectServicePrompt: string;
-      propertyType: string;
-      propertyTypePlaceholder: string;
-      message: string;
-      messagePlaceholder: string;
-      submitBtn: string;
-      submitting: string;
-      statusSuccess: string;
-      statusRedirectWhatsApp: string;
-      errors: {
-        nameRequired: string;
-        emailInvalid: string;
-        phoneRequired: string;
-        serviceRequired: string;
-      };
-      disclaimer: string;
-    };
+    directWhatsAppTitle: string;
+    directWhatsAppDesc: string;
+    directWhatsAppBtn: string;
+    prefilledChoiceTitle: string;
+    choices: {
+      id: string;
+      label: string;
+      messageText: string;
+    }[];
     info: {
       phoneTitle: string;
       emailTitle: string;
@@ -110,6 +94,7 @@ export interface ContentData {
     quickLinksTitle: string;
     contactTitle: string;
     copyright: string;
+    credit: string;
   };
   whatsapp: {
     tooltip: string;
@@ -125,13 +110,13 @@ export const contentEn: ContentData = {
     about: 'About Us',
     gallery: 'Gallery',
     contact: 'Contact',
-    quoteBtn: 'Get a Free Quote'
+    quoteBtn: 'Chat on WhatsApp'
   },
   hero: {
     eyebrow: 'PROFESSIONAL CLEANING SERVICES IN AUSTIN, TX',
     title: 'Your Trusted Cleaning Partners',
     description: 'Professional cleaning services for homes, businesses, Airbnb properties, and move-in or move-out needs.',
-    primaryCta: 'Get a Free Quote',
+    primaryCta: 'Chat on WhatsApp',
     secondaryCta: 'Call (737) 781-2909',
     badgeText: 'Residential & Commercial Cleaning'
   },
@@ -139,7 +124,7 @@ export const contentEn: ContentData = {
     tag: 'Our Confirmed Services',
     title: 'Tailored Cleaning for Every Need',
     subtitle: 'From private residences to commercial facilities and turn-key rentals, we deliver meticulous care across Austin.',
-    ctaText: 'Request a Quote for this Service',
+    ctaText: 'Chat on WhatsApp for this Service',
     items: [
       {
         id: 'residential',
@@ -223,44 +208,50 @@ export const contentEn: ContentData = {
   contactSection: {
     tag: 'Get In Touch',
     title: "Let's Talk About Your Cleaning Needs",
-    description: 'Tell us a little about the space you need cleaned, and contact our team to discuss your service requirements.',
-    form: {
-      fullName: 'Full Name',
-      fullNamePlaceholder: 'e.g. Sarah Jenkins',
-      email: 'Email Address',
-      emailPlaceholder: 'e.g. sarah@example.com',
-      phone: 'Phone Number',
-      phonePlaceholder: 'e.g. (737) 000-0000',
-      serviceNeeded: 'Service Needed',
-      selectServicePrompt: 'Select a service...',
-      propertyType: 'Property Type (Optional)',
-      propertyTypePlaceholder: 'e.g. Apartment, House, Office',
-      message: 'Message / Details',
-      messagePlaceholder: 'Tell us about the size of the space, specific cleaning needs, or preferred dates...',
-      submitBtn: 'Request a Quote',
-      submitting: 'Preparing Request...',
-      statusSuccess: 'Thank you! Redirecting to confirm your quote via WhatsApp...',
-      statusRedirectWhatsApp: 'Click here if WhatsApp did not open automatically',
-      errors: {
-        nameRequired: 'Please enter your full name.',
-        emailInvalid: 'Please enter a valid email address.',
-        phoneRequired: 'Please enter your phone number.',
-        serviceRequired: 'Please select a service.'
+    description: 'Get in touch with our team directly via WhatsApp or phone call for immediate assistance with your cleaning service requirements.',
+    directWhatsAppTitle: 'Direct WhatsApp Connection',
+    directWhatsAppDesc: 'Choose what you need help with below, and start an instant chat directly with our team:',
+    directWhatsAppBtn: 'Open WhatsApp Chat Now',
+    prefilledChoiceTitle: 'Select your inquiry for a fast quote:',
+    choices: [
+      {
+        id: 'residential',
+        label: 'Residential Cleaning Quote',
+        messageText: "Hello ATX STAR CLEANING! I'm interested in requesting a quote for Residential Home Cleaning in Austin."
       },
-      disclaimer: 'Your request opens directly in WhatsApp or our email dispatch so we can assist you promptly.'
-    },
+      {
+        id: 'commercial',
+        label: 'Commercial Office Cleaning',
+        messageText: "Hello ATX STAR CLEANING! I'd like to get a quote for Commercial / Office Cleaning in Austin."
+      },
+      {
+        id: 'airbnb',
+        label: 'Airbnb Turnover Cleaning',
+        messageText: "Hello ATX STAR CLEANING! I'm an Airbnb host in Austin looking for professional turnover cleaning services."
+      },
+      {
+        id: 'moveinout',
+        label: 'Move In / Move Out Cleaning',
+        messageText: "Hello ATX STAR CLEANING! I need a quote for Move In / Move Out cleaning for a property in Austin."
+      },
+      {
+        id: 'general',
+        label: 'General Inquiry / Free Quote',
+        messageText: "Hello! I'm interested in your cleaning services. I'd like to request a quote."
+      }
+    ],
     info: {
       phoneTitle: 'Call or Text',
       emailTitle: 'Email Us',
       locationTitle: 'Primary Service Area',
       locationText: 'Austin, Texas and surrounding areas',
-      hoursNote: 'Quick replies via WhatsApp and phone.'
+      hoursNote: 'Immediate assistance via WhatsApp and direct call.'
     }
   },
   ctaBanner: {
     title: 'Ready to Talk About Your Cleaning Needs?',
-    description: 'Contact ATX STAR CLEANING to discuss the right cleaning service for your space.',
-    primaryBtn: 'Request a Quote',
+    description: 'Contact ATX STAR CLEANING directly to discuss the right cleaning service for your space.',
+    primaryBtn: 'Chat on WhatsApp',
     callBtn: 'Call Now'
   },
   footer: {
@@ -268,7 +259,8 @@ export const contentEn: ContentData = {
     servicesTitle: 'Our Services',
     quickLinksTitle: 'Quick Links',
     contactTitle: 'Contact Info',
-    copyright: 'ATX STAR CLEANING. All rights reserved.'
+    copyright: 'ATX STAR CLEANING. All rights reserved.',
+    credit: 'Created by Rueda La Rola Media'
   },
   whatsapp: {
     tooltip: 'Chat on WhatsApp',
@@ -284,13 +276,13 @@ export const contentEs: ContentData = {
     about: 'Nosotros',
     gallery: 'Galería',
     contact: 'Contacto',
-    quoteBtn: 'Solicitar cotización'
+    quoteBtn: 'Chatear por WhatsApp'
   },
   hero: {
     eyebrow: 'SERVICIOS PROFESIONALES DE LIMPIEZA EN AUSTIN, TEXAS',
     title: 'Su socio de confianza en limpieza',
     description: 'Servicios profesionales de limpieza para hogares, negocios, propiedades Airbnb y mudanzas.',
-    primaryCta: 'Solicitar cotización',
+    primaryCta: 'Chatear por WhatsApp',
     secondaryCta: 'Llamar al (737) 781-2909',
     badgeText: 'Limpieza residencial y comercial'
   },
@@ -298,7 +290,7 @@ export const contentEs: ContentData = {
     tag: 'Nuestros Servicios Confirmados',
     title: 'Limpieza a Medida para Cada Necesidad',
     subtitle: 'Desde residencias privadas hasta oficinas comerciales y alojamientos turísticos, brindamos máxima atención en Austin.',
-    ctaText: 'Solicitar cotización para este servicio',
+    ctaText: 'Chatear por WhatsApp sobre este servicio',
     items: [
       {
         id: 'residential',
@@ -369,7 +361,7 @@ export const contentEs: ContentData = {
       {
         id: 'b4',
         title: 'Contacto sencillo y solicitudes de cotización',
-        description: 'Comuníquese directamente mediante llamada, WhatsApp o nuestro formulario digital.'
+        description: 'Comuníquese directamente mediante llamada o WhatsApp.'
       }
     ]
   },
@@ -382,44 +374,50 @@ export const contentEs: ContentData = {
   contactSection: {
     tag: 'Contacto Directo',
     title: 'Hablemos de sus necesidades de limpieza',
-    description: 'Cuéntenos un poco sobre el espacio que necesita limpiar y contáctenos para conversar sobre el servicio que requiere.',
-    form: {
-      fullName: 'Nombre completo',
-      fullNamePlaceholder: 'ej. Carlos Mendoza',
-      email: 'Correo electrónico',
-      emailPlaceholder: 'ej. carlos@ejemplo.com',
-      phone: 'Teléfono',
-      phonePlaceholder: 'ej. (737) 000-0000',
-      serviceNeeded: 'Servicio requerido',
-      selectServicePrompt: 'Seleccione un servicio...',
-      propertyType: 'Tipo de propiedad (Opcional)',
-      propertyTypePlaceholder: 'ej. Casa, Departamento, Oficina',
-      message: 'Mensaje / Detalles',
-      messagePlaceholder: 'Cuéntenos sobre el tamaño del espacio, necesidades específicas o fechas deseadas...',
-      submitBtn: 'Solicitar cotización',
-      submitting: 'Preparando solicitud...',
-      statusSuccess: '¡Gracias! Redirigiendo a WhatsApp para confirmar su cotización...',
-      statusRedirectWhatsApp: 'Haga clic aquí si WhatsApp no se abrió automáticamente',
-      errors: {
-        nameRequired: 'Por favor ingrese su nombre completo.',
-        emailInvalid: 'Por favor ingrese un correo electrónico válido.',
-        phoneRequired: 'Por favor ingrese su número de teléfono.',
-        serviceRequired: 'Por favor seleccione un servicio.'
+    description: 'Comuníquese directamente por WhatsApp o llamada telefónica para conversar con nuestro equipo de inmediato sobre el servicio que requiere.',
+    directWhatsAppTitle: 'Conexión Directa por WhatsApp',
+    directWhatsAppDesc: 'Seleccione abajo el motivo de su consulta para iniciar un chat instantáneo con nuestro equipo:',
+    directWhatsAppBtn: 'Abrir Chat de WhatsApp Ahora',
+    prefilledChoiceTitle: 'Seleccione su consulta para una cotización rápida:',
+    choices: [
+      {
+        id: 'residential',
+        label: 'Cotización para Limpieza Residencial',
+        messageText: '¡Hola ATX STAR CLEANING! Quisiera solicitar una cotización para limpieza de hogar / residencial en Austin.'
       },
-      disclaimer: 'Su solicitud abre directamente WhatsApp o nuestro correo para brindarle atención inmediata.'
-    },
+      {
+        id: 'commercial',
+        label: 'Limpieza Comercial / Oficinas',
+        messageText: '¡Hola ATX STAR CLEANING! Me gustaría recibir una cotización para limpieza comercial / oficinas en Austin.'
+      },
+      {
+        id: 'airbnb',
+        label: 'Limpieza para Propiedades Airbnb',
+        messageText: '¡Hola ATX STAR CLEANING! Tengo una propiedad Airbnb en Austin y necesito servicio de limpieza entre estancias.'
+      },
+      {
+        id: 'moveinout',
+        label: 'Limpieza de Entrada / Salida (Mudanzas)',
+        messageText: '¡Hola ATX STAR CLEANING! Requiero cotización para limpieza profunda por mudanza (Move In / Move Out) en Austin.'
+      },
+      {
+        id: 'general',
+        label: 'Consulta General / Cotización Rápida',
+        messageText: '¡Hola! Estoy interesado/a en sus servicios de limpieza y quisiera solicitar una cotización.'
+      }
+    ],
     info: {
       phoneTitle: 'Llamar o escribir',
       emailTitle: 'Enviar correo',
       locationTitle: 'Área de servicio principal',
       locationText: 'Austin, Texas y áreas metropolitanas',
-      hoursNote: 'Respuestas ágiles por llamada o WhatsApp.'
+      hoursNote: 'Atención ágil e inmediata por WhatsApp y llamada directa.'
     }
   },
   ctaBanner: {
     title: '¿Listo para hablar sobre sus necesidades de limpieza?',
     description: 'Contacte a ATX STAR CLEANING para conversar sobre el servicio de limpieza que necesita.',
-    primaryBtn: 'Solicitar cotización',
+    primaryBtn: 'Chatear por WhatsApp',
     callBtn: 'Llamar ahora'
   },
   footer: {
@@ -427,7 +425,8 @@ export const contentEs: ContentData = {
     servicesTitle: 'Nuestros Servicios',
     quickLinksTitle: 'Enlaces Rápidos',
     contactTitle: 'Información de Contacto',
-    copyright: 'ATX STAR CLEANING. Todos los derechos reservados.'
+    copyright: 'ATX STAR CLEANING. Todos los derechos reservados.',
+    credit: 'Creado por Rueda La Rola Media'
   },
   whatsapp: {
     tooltip: 'Chatear por WhatsApp',

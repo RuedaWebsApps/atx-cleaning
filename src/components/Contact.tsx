@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { ContentData } from '../content';
-import { Phone, Mail, MapPin, Send, MessageSquare, AlertCircle, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, ArrowUpRight, Check, Sparkles } from 'lucide-react';
 import { BUSINESS_INFO } from '../content/businessInfo';
 import './Contact.css';
 
@@ -10,65 +10,30 @@ interface Props {
 }
 
 export const Contact: React.FC<Props> = ({ content, selectedServicePreset = '' }) => {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [serviceNeeded, setServiceNeeded] = useState(selectedServicePreset);
-  const [propertyType, setPropertyType] = useState('');
-  const [message, setMessage] = useState('');
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [whatsAppRedirectUrl, setWhatsAppRedirectUrl] = useState('');
-
-  const validate = () => {
-    const errs: Record<string, string> = {};
-    if (!fullName.trim()) {
-      errs.fullName = content.contactSection.form.errors.nameRequired;
+  const [selectedChoiceId, setSelectedChoiceId] = useState<string>(() => {
+    if (selectedServicePreset) {
+      const match = content.contactSection.choices.find(c => 
+        selectedServicePreset.toLowerCase().includes(c.id.toLowerCase())
+      );
+      if (match) return match.id;
     }
-    if (!phone.trim()) {
-      errs.phone = content.contactSection.form.errors.phoneRequired;
+    return content.contactSection.choices[0]?.id || 'residential';
+  });
+
+  useEffect(() => {
+    if (selectedServicePreset) {
+      const match = content.contactSection.choices.find(c => 
+        selectedServicePreset.toLowerCase().includes(c.id.toLowerCase())
+      );
+      if (match) setSelectedChoiceId(match.id);
     }
-    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errs.email = content.contactSection.form.errors.emailInvalid;
-    }
-    if (!serviceNeeded) {
-      errs.serviceNeeded = content.contactSection.form.errors.serviceRequired;
-    }
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
+  }, [selectedServicePreset, content]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
+  const currentChoice = content.contactSection.choices.find(c => c.id === selectedChoiceId) 
+    || content.contactSection.choices[0];
 
-    // Create a clean WhatsApp message
-    const greeting = content.lang === 'es' ? '¡Hola ATX STAR CLEANING!' : 'Hello ATX STAR CLEANING!';
-    const intro = content.lang === 'es' 
-      ? `Me gustaría cotizar el servicio de limpieza:` 
-      : `I would like to request a quote for cleaning services:`;
-    
-    const lines = [
-      greeting,
-      intro,
-      `• Nombre: ${fullName.trim()}`,
-      `• Servicio: ${serviceNeeded}`,
-      `• Teléfono: ${phone.trim()}`,
-    ];
-
-    if (email.trim()) lines.push(`• Email: ${email.trim()}`);
-    if (propertyType.trim()) lines.push(`• Propiedad: ${propertyType.trim()}`);
-    if (message.trim()) lines.push(`• Detalles: ${message.trim()}`);
-
-    const rawMsg = lines.join('\n');
-    const waUrl = `https://wa.me/17377812909?text=${encodeURIComponent(rawMsg)}`;
-
-    setWhatsAppRedirectUrl(waUrl);
-    setIsSubmitted(true);
-
-    // Open WhatsApp in a new tab safely
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+  const getWhatsAppLink = (messageText: string) => {
+    return `https://wa.me/17377812909?text=${encodeURIComponent(messageText)}`;
   };
 
   return (
@@ -77,6 +42,7 @@ export const Contact: React.FC<Props> = ({ content, selectedServicePreset = '' }
         {/* Section Header */}
         <div className="contact-header">
           <span className="section-tag section-tag-gold">
+            <Sparkles size={14} />
             {content.contactSection.tag}
           </span>
           <h2 className="section-title">
@@ -102,14 +68,14 @@ export const Contact: React.FC<Props> = ({ content, selectedServicePreset = '' }
               </div>
             </div>
 
-            <div className="contact-info-card">
-              <div className="info-icon-box">
-                <MessageSquare size={22} />
+            <div className="contact-info-card active-wa-card">
+              <div className="info-icon-box wa-icon-box">
+                <MessageCircle size={24} />
               </div>
               <div>
-                <span className="info-label">WhatsApp</span>
+                <span className="info-label">WhatsApp Direct</span>
                 <a
-                  href={`https://wa.me/17377812909?text=${encodeURIComponent(content.whatsapp.prefilledMessage)}`}
+                  href={getWhatsAppLink(content.whatsapp.prefilledMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="info-val-link"
@@ -146,161 +112,71 @@ export const Contact: React.FC<Props> = ({ content, selectedServicePreset = '' }
             </div>
           </div>
 
-          {/* Right Column: Quote Form */}
-          <div className="contact-form-panel">
-            <form onSubmit={handleSubmit} noValidate className="quote-form-card">
-              <h3 className="form-card-title">
-                {content.contactSection.form.submitBtn}
+          {/* Right Column: Direct WhatsApp Interactive Hub */}
+          <div className="contact-wa-hub-card">
+            <div className="wa-hub-header">
+              <div className="wa-badge-live">
+                <span className="wa-pulse-dot" />
+                <span>ONLINE SUPPORT</span>
+              </div>
+              <h3 className="wa-hub-title">
+                {content.contactSection.directWhatsAppTitle}
               </h3>
+              <p className="wa-hub-desc">
+                {content.contactSection.directWhatsAppDesc}
+              </p>
+            </div>
 
-              {isSubmitted ? (
-                <div className="form-success-box" role="alert">
-                  <CheckCircle size={32} className="success-icon" />
-                  <p className="success-msg">{content.contactSection.form.statusSuccess}</p>
-                  {whatsAppRedirectUrl && (
-                    <a
-                      href={whatsAppRedirectUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-primary"
+            {/* Quick Service Inquiry Selector */}
+            <div className="wa-choices-group">
+              <span className="wa-choices-label">
+                {content.contactSection.prefilledChoiceTitle}
+              </span>
+              <div className="wa-chips-list">
+                {content.contactSection.choices.map((choice) => {
+                  const isSelected = choice.id === selectedChoiceId;
+                  return (
+                    <button
+                      key={choice.id}
+                      type="button"
+                      className={`wa-choice-chip ${isSelected ? 'chip-active' : ''}`}
+                      onClick={() => setSelectedChoiceId(choice.id)}
                     >
-                      {content.contactSection.form.statusRedirectWhatsApp}
-                    </a>
-                  )}
-                </div>
-              ) : (
-                <>
-                  <div className="form-group-row">
-                    <div className="form-field">
-                      <label htmlFor="fullName" className="form-label">
-                        {content.contactSection.form.fullName} <span className="req">*</span>
-                      </label>
-                      <input
-                        id="fullName"
-                        type="text"
-                        className={`form-input ${errors.fullName ? 'has-error' : ''}`}
-                        placeholder={content.contactSection.form.fullNamePlaceholder}
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        required
-                        aria-invalid={!!errors.fullName}
-                      />
-                      {errors.fullName && (
-                        <span className="error-message">
-                          <AlertCircle size={14} /> {errors.fullName}
-                        </span>
-                      )}
-                    </div>
+                      <span className="chip-indicator">
+                        {isSelected ? <Check size={14} /> : <span className="chip-empty-dot" />}
+                      </span>
+                      <span>{choice.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-                    <div className="form-field">
-                      <label htmlFor="phone" className="form-label">
-                        {content.contactSection.form.phone} <span className="req">*</span>
-                      </label>
-                      <input
-                        id="phone"
-                        type="tel"
-                        className={`form-input ${errors.phone ? 'has-error' : ''}`}
-                        placeholder={content.contactSection.form.phonePlaceholder}
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
-                        aria-invalid={!!errors.phone}
-                      />
-                      {errors.phone && (
-                        <span className="error-message">
-                          <AlertCircle size={14} /> {errors.phone}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+            {/* Message Preview Box */}
+            <div className="wa-message-preview">
+              <span className="preview-label">
+                {content.lang === 'es' ? 'Mensaje preparado para enviar:' : 'Prepared WhatsApp message:'}
+              </span>
+              <div className="preview-bubble">
+                <p>"{currentChoice.messageText}"</p>
+              </div>
+            </div>
 
-                  <div className="form-group-row">
-                    <div className="form-field">
-                      <label htmlFor="email" className="form-label">
-                        {content.contactSection.form.email}
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        className={`form-input ${errors.email ? 'has-error' : ''}`}
-                        placeholder={content.contactSection.form.emailPlaceholder}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        aria-invalid={!!errors.email}
-                      />
-                      {errors.email && (
-                        <span className="error-message">
-                          <AlertCircle size={14} /> {errors.email}
-                        </span>
-                      )}
-                    </div>
+            {/* Direct Connect CTA Button */}
+            <a
+              href={getWhatsAppLink(currentChoice.messageText)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-whatsapp-direct"
+            >
+              <MessageCircle size={22} />
+              <span>{content.contactSection.directWhatsAppBtn}</span>
+              <ArrowUpRight size={20} />
+            </a>
 
-                    <div className="form-field">
-                      <label htmlFor="serviceNeeded" className="form-label">
-                        {content.contactSection.form.serviceNeeded} <span className="req">*</span>
-                      </label>
-                      <select
-                        id="serviceNeeded"
-                        className={`form-select ${errors.serviceNeeded ? 'has-error' : ''}`}
-                        value={serviceNeeded}
-                        onChange={(e) => setServiceNeeded(e.target.value)}
-                        required
-                        aria-invalid={!!errors.serviceNeeded}
-                      >
-                        <option value="">{content.contactSection.form.selectServicePrompt}</option>
-                        {content.servicesSection.items.map((s) => (
-                          <option key={s.id} value={s.name}>
-                            {s.name}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.serviceNeeded && (
-                        <span className="error-message">
-                          <AlertCircle size={14} /> {errors.serviceNeeded}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="form-field">
-                    <label htmlFor="propertyType" className="form-label">
-                      {content.contactSection.form.propertyType}
-                    </label>
-                    <input
-                      id="propertyType"
-                      type="text"
-                      className="form-input"
-                      placeholder={content.contactSection.form.propertyTypePlaceholder}
-                      value={propertyType}
-                      onChange={(e) => setPropertyType(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-field">
-                    <label htmlFor="message" className="form-label">
-                      {content.contactSection.form.message}
-                    </label>
-                    <textarea
-                      id="message"
-                      rows={3}
-                      className="form-textarea"
-                      placeholder={content.contactSection.form.messagePlaceholder}
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                    />
-                  </div>
-
-                  <p className="form-disclaimer">
-                    {content.contactSection.form.disclaimer}
-                  </p>
-
-                  <button type="submit" className="btn btn-primary btn-submit-quote">
-                    <span>{content.contactSection.form.submitBtn}</span>
-                    <Send size={18} />
-                  </button>
-                </>
-              )}
-            </form>
+            <div className="wa-instant-guarantee">
+              <span>⚡ {content.lang === 'es' ? 'Abre la app de WhatsApp al instante con el mensaje listo' : 'Instantly opens the WhatsApp app with message ready to send'}</span>
+            </div>
           </div>
         </div>
       </div>
